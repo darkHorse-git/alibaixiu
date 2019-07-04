@@ -1,5 +1,5 @@
 $("#userForm").on('submit', function () {
-  
+
   // 收集表单数据
   var userData = $(this).serialize();
 
@@ -81,14 +81,60 @@ $("#formBox").on("submit", "#modifyBox", function () {
 })
 //删除用户
 $("#userList").on('click', '.delete', function () {
-  //获取要删除的id
-  var id = $(this).attr('data_id');
+  if (confirm('确定要删除吗？')) {
+    //获取要删除的id
+    var id = $(this).attr('data_id');
 
-  $.ajax({
-    type: 'DELETE',//get或post
-    url: '/users/' + id,//请求的地址
-    success: function (result) {//成功的回调函数
-      render()
-    }
-  })
-}) 
+    $.ajax({
+      type: 'DELETE',//get或post
+      url: '/users/' + id,//请求的地址
+      success: function (result) {//成功的回调函数
+        render()
+      }
+    })
+  }
+})
+
+$("#selectAll").on('change', function () {
+  var checkBool = $(this).prop('checked')
+  $(".selectOne").prop('checked', checkBool)
+  if ($(this).prop('checked')) {
+    $("#deleteMany").show();
+  } else {
+    $("#deleteMany").hide();
+  }
+})
+$("#userList").on('change', '.selectOne', function () {
+  var checkboxs = $("#userList").find('.selectOne');
+
+  if (checkboxs.length == checkboxs.filter(':checked').length) {
+    $("#selectAll").prop('checked', true)
+  } else (
+    $("#selectAll").prop('checked', false)
+  )
+
+  if (checkboxs.filter(":checked").length >= 2) {
+    $("#deleteMany").show();
+  } else {
+    $("#deleteMany").hide();
+  }
+})
+//批量删除
+$("#deleteMany").on('click', function () {
+  if (confirm('确定要删除吗！')) {
+    var checkboxs = $("#userList").find('.selectOne');
+    var selects = checkboxs.filter(":checked");
+
+    selects.each(function (i, val) {
+      var id = $(val).attr('data_id')
+      $.ajax({
+        type: 'DELETE',//get或post
+        url: '/users/' + id,//请求的地址
+        success: function (result) {//成功的回调函数
+          render()
+          $("#deleteMany").hide();
+        }
+      })
+    })
+  }
+})
