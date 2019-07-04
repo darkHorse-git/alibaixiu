@@ -1,4 +1,5 @@
 $("#userForm").on('submit', function () {
+  
   // 收集表单数据
   var userData = $(this).serialize();
 
@@ -7,7 +8,9 @@ $("#userForm").on('submit', function () {
     url: '/users',//请求的地址
     data: userData,//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
     success: function (result) {//成功的回调函数
-      location.reload();//刷新当前页面
+      // location.reload();//刷新当前页面
+      // render();  
+      location.reload()
     },
     error: function (err) {
       alert(JSON.parse(err.responseText).message);
@@ -16,8 +19,8 @@ $("#userForm").on('submit', function () {
   return false;//阻止表单默认行为
 })
 
-//给文件选择控件添加onchange事件
-$("#avatar").on('change', function () {
+//将文件选择控件的change事件委托到一直存在的formbox上
+$("#formBox").on('change', '#avatar', function () {
   var formData = new FormData();
   formData.append('avatar', this.files[0]);
 
@@ -38,15 +41,18 @@ $("#avatar").on('change', function () {
     }
   })
 })
-//获取用户列表
-$.ajax({
-  type: 'get',//get或post
-  url: '/users',//请求的地址
-  success: function (userInfo) {//成功的回调函数
-    var html = template('userListTpl', { userInfo: userInfo });
-    $("#userList").html(html)
-  }
-})
+function render() {
+  //获取用户列表
+  $.ajax({
+    type: 'get',//get或post
+    url: '/users',//请求的地址
+    success: function (userInfo) {//成功的回调函数
+      var html = template('userListTpl', { userInfo: userInfo });
+      $("#userList").html(html)
+    }
+  })
+}
+render()
 //渲染用户修改页面
 $("#userList").on('click', '.edit', function () {
   var id = $(this).attr('data_id');
@@ -54,14 +60,35 @@ $("#userList").on('click', '.edit', function () {
     type: 'GET',//get或post
     url: '/users/' + id,//请求的地址
     success: function (userInfo) {//成功的回调函数
-      console.log(userInfo);
-      var html = template('modifyUserTpl',userInfo);
-      $("#userForm").html(html)
+      var html = template('modifyUserTpl', userInfo);
+      $("#formBox").html(html)
     }
   })
 })
-$("#userForm").on("submit",function() {
+//修改用户信息
+$("#formBox").on("submit", "#modifyBox", function () {
   var modifyInfo = $(this).serialize();
-  console.log(modifyInfo);
-  
+  var id = $(this).attr('data-id');
+  $.ajax({
+    type: 'PUT',//get或post
+    url: '/users/' + id,//请求的地址
+    data: modifyInfo,//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
+    success: function (result) {//成功的回调函数
+      location.reload()
+    }
+  })
+  return false;
 })
+//删除用户
+$("#userList").on('click', '.delete', function () {
+  //获取要删除的id
+  var id = $(this).attr('data_id');
+
+  $.ajax({
+    type: 'DELETE',//get或post
+    url: '/users/' + id,//请求的地址
+    success: function (result) {//成功的回调函数
+      render()
+    }
+  })
+}) 
