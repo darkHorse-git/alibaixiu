@@ -47,18 +47,21 @@ $.ajax({
     $("#userList").html(html)
   }
 })
-
+//渲染用户修改页面
 $("#userList").on('click', '.edit', function () {
   var id = $(this).attr('data_id');
-
   $.ajax({
     type: 'GET',//get或post
     url: '/users/' + id,//请求的地址
-    // data: {
-    //   nickName: username
-    // },//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
-    success: function (result) {//成功的回调函数
-      console.log(result)
+    success: function (userInfo) {//成功的回调函数
+      console.log(userInfo);
+      var html = template('modifyUserTpl',userInfo);
+      $("#userForm").html(html)
     }
   })
+})
+$("#userForm").on("submit",function() {
+  var modifyInfo = $(this).serialize();
+  console.log(modifyInfo);
+  
 })
