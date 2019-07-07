@@ -1,3 +1,14 @@
+.modal-dialog {
+    width: 800px;
+    margin: 30px auto;
+}
+.btn-primary {
+  float: right;
+}
+.btn-margin {
+  margin-top: 43px;
+  width:46%;
+}
 .nprogress-busy {
   cursor: wait;
 }
@@ -310,9 +321,12 @@ body {
 .main .container-fluid .form-image:hover i {
   opacity: .6;
 }
-
+.thumbnail {
+  width: 210px;
+  margin-left: 100px; 
+}
 .main .container-fluid .thumbnail {
-  width: 100%;
+  /* width: 100%; */
 }
 
 .login {
