@@ -1,16 +1,17 @@
+// 添加文章分类
 $("#addCategory").on("submit", function () {
   var formData = $(this).serialize();
   $.ajax({
     type: 'post',//get或post
     url: '/categories',//请求的地址
     data: formData,//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
-    success: function (categoryData) {//成功的回调函数
+    success: function () {//成功的回调函数
       render()
     }
   })
   return false;
 })
-
+// 渲染分类列表
 function render() {
   $.ajax({
     type: 'get',//get或post
@@ -23,6 +24,7 @@ function render() {
   })
 }
 render()
+// 编辑分类
 $("#categoryList").on('click', '.edit', function () {
   var id = $(this).attr('data-id');
   $.ajax({
@@ -34,7 +36,7 @@ $("#categoryList").on('click', '.edit', function () {
     }
   })
 })
-
+// 删除分类
 $("#categoryList").on("click", '.delete', function () {
   if (confirm('确定要删除吗？')) {
     var id = $(this).attr("data-id");
@@ -47,6 +49,7 @@ $("#categoryList").on("click", '.delete', function () {
     })
   }
 })
+//根据ID修改分类
 $("#categoryBox").on("submit", "#addCategory", function () {
   var formData = $(this).serialize();
   var id = $(this).attr("data-id");

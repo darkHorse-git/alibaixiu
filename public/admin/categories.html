@@ -1,3 +1,9 @@
+<!-- 登录拦截，判断用户登录状态 -->
+<script src="/login/status"></script>
+<script>
+  if (!isLogin) location.href = './login.html' 
+</script>
+<!-- end -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -13,7 +19,7 @@
       <button class="btn btn-default navbar-btn fa fa-bars"></button>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="password-reset.html"><i class="fa fa-user"></i>修改密码</a></li>
-        <li><a href="login.html"><i class="fa fa-sign-out"></i>退出</a></li>
+        <li><a href="javascript:;"  id="logout"><i class="fa fa-sign-out"></i>退出</a></li>
       </ul>
     </nav>
     <div class="container-fluid">
@@ -93,7 +99,7 @@
   <div class="aside">
     <div class="profile">
       <img class="avatar" src="../uploads/avatar.jpg">
-      <h3 class="name">Coder</h3>
+      <h3 class="name"></h3>
     </div>
     <ul class="nav">
       <li>
@@ -129,6 +135,8 @@
   <script src="../assets/vendors/jquery/jquery.js"></script>
   <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
   <script src="../assets/vendors/art-template/template-web.js"></script>
+  <script src="../assets/js/common.js"></script>
   <script src="../assets/js/categories.js"></script>
+  
 </body>
 </html>

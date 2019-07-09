@@ -17,13 +17,11 @@ $.ajax({
   type: 'get',//get或post
   url: '/categories',//请求的地址
   success: function (result) {//成功的回调函数
-window.categoryData =result;
+    window.categoryData =result;
     var cg_html = template("allCategoryTpl", {category: result });
     $("#allCategory").html(cg_html)
   }
 })
-
-
 
 function dateFormat(date) {
   return date.split('T')[0]
@@ -43,8 +41,6 @@ $("#filterBtn").on("click", function() {
         state:state
       },
       success: function (result) {//成功的回调函数
-        console.log(result);
-
         var html = template("articleListTpl", result);
         var page_html =template("pagesTpl",result)
         $("#articleList").html(html)
@@ -70,7 +66,7 @@ function changePage(page) {
     }
   })
 }
-
+//呈递文章编辑页面
 $("#articleList").on("click",'.edit',function() {
   var id = $(this).attr("data-id")
   $.ajax({
@@ -83,10 +79,6 @@ $("#articleList").on("click",'.edit',function() {
        var a=  $("<option value="+element._id+" >"+element.title+"</option>")
         $("#categoryOp").append(a)
       });
-      console.log(categoryData);
-      console.log(result);
-      
-     
     }
   })  
 })
@@ -103,9 +95,13 @@ $("#articleList").on("click",'.deleteBtn',function() {
     })  
   }
 })
-
+//修改文章
 $("#addForm").on('submit',function() {
   var id = $(".modifyBtn").attr("data-id")
+  //如果用户没有更改图片，隐藏域的值为空
+  if ($("#hidimg").val() == '') {
+    $("#hidimg").val($(this).find('img').attr('src'))
+  }
   var formData = $(this).serialize();
   $.ajax({
     type:'PUT',//get或post
@@ -116,21 +112,4 @@ $("#addForm").on('submit',function() {
     }
   })
   return false;
-})
-//事件文件上传，图片预览
-$("#addForm").on("change","#feature",function() {
-  var formData = new FormData();
-  formData.append('avatar',this.files[0]);
-  $.ajax({
-    type:'POST',//get或post
-    url:'/upload',//请求的地址
-    contentType:false,
-    processData:false,
-    data:formData,//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
-    success:function(result){//成功的回调函数
-      console.log(result[0].avatar)
-      $("#preview").prop("src",result[0].avatar)
-      $("#hidimg").val(result[0].avatar)
-    }
-  }) 
 })

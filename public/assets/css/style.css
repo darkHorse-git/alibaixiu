@@ -394,7 +394,9 @@ textarea {
   -webkit-appearance: button; /* 1 */
   font: inherit; /* 2 */
 }
-
+.detail {
+  padding-top:10px;
+}
 /* Interactive
    ========================================================================== */
 
@@ -970,6 +972,11 @@ img {
   margin-bottom: 10px;
   font-size: 14px;
   color: #777;
+  word-break:break-all;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
 
 .content .extra {
